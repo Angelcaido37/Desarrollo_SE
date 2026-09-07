@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Misión Arquitectura: del problema a un sistema implementable</title>
+<style>
+:root{
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --text:#14213d;
+  --muted:#64748b;
+  --border:#d7e0ea;
+  --accent:#1d4ed8;
+  --accent2:#eaf0ff;
+  --ok:#18794e;
+  --warn:#9a6700;
+  --danger:#b42318;
+  --panel:#f8fafc;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.45;
+}
+.container{
+  width:min(1180px,94%);
+  margin:0 auto;
+  padding:28px 0 60px;
+}
+.hero{
+  background:linear-gradient(135deg,#17365d,#1d4ed8);
+  color:white;
+  border-radius:18px;
+  padding:26px;
+}
+.hero h1{
+  margin:0 0 8px;
+  font-size:clamp(1.8rem,3vw,2.6rem);
+  line-height:1.12;
+}
+.hero p{margin:5px 0;color:#e7eefc}
+.topbar{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:16px;
+  align-items:end;
+  margin-top:18px;
+}
+@media(max-width:760px){.topbar{grid-template-columns:1fr}}
+.timer{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  align-items:center;
+  padding:10px;
+  border-radius:12px;
+  background:rgba(255,255,255,.12);
+}
+.timer strong{min-width:68px;text-align:center;font-size:1.2rem}
+label{display:block;font-size:.95rem;font-weight:700}
+input[type=text], input[type=number], textarea, select{
+  width:100%;
+  margin-top:6px;
+  padding:11px 12px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:white;
+  color:var(--text);
+  font-size:1rem;
+}
+textarea{resize:vertical}
+button{
+  border:0;
+  border-radius:10px;
+  padding:10px 14px;
+  font-weight:700;
+  font-size:.95rem;
+  cursor:pointer;
+}
+button:focus,input:focus,textarea:focus,select:focus{
+  outline:3px solid rgba(29,78,216,.18);
+  outline-offset:2px;
+}
+.btnPrimary{background:var(--accent);color:white}
+.btnSecondary{background:white;color:var(--text);border:1px solid var(--border)}
+.hero .btnSecondary{background:white}
+.progressWrap{margin:18px 0 22px}
+.progressMeta{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  font-weight:700;
+  margin-bottom:7px;
+}
+.progressTrack{
+  height:14px;
+  background:#dde6f0;
+  border-radius:999px;
+  overflow:hidden;
+}
+.progressBar{
+  height:100%;
+  width:0%;
+  background:var(--accent);
+  transition:width .25s ease;
+}
+.navgrid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+  margin-bottom:20px;
+}
+.navgrid a{
+  text-decoration:none;
+  color:var(--text);
+  background:white;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px;
+  text-align:center;
+}
+@media(max-width:720px){.navgrid{grid-template-columns:1fr 1fr}}
+.section{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:20px;
+}
+.sectionHead{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.sectionHead h2{margin:2px 0 4px;font-size:1.35rem}
+.eyebrow{
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  font-size:.76rem;
+  font-weight:700;
+  color:var(--muted);
+}
+.score{
+  padding:7px 11px;
+  border-radius:999px;
+  background:var(--accent2);
+  font-weight:700;
+  white-space:nowrap;
+}
+.small{font-size:.9rem;color:var(--muted)}
+.stack{display:grid;gap:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:800px){.grid2,.grid3{grid-template-columns:1fr}}
+.caseCard,.panel{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px;
+}
+.radioRow{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+.radioRow label{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-weight:400;
+}
+.feedback{
+  margin-top:9px;
+  font-size:.92rem;
+  color:var(--muted);
+}
+.actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+.success{color:var(--ok);font-weight:700}
+.warning{color:var(--warn);font-weight:700}
+.error{color:var(--danger);font-weight:700}
+.hint{
+  background:#fff9e7;
+  border-left:4px solid #d5a42a;
+  padding:12px;
+  border-radius:8px;
+  margin-top:12px;
+}
+.hidden{display:none}
+.architecture{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin-top:12px;
+}
+@media(max-width:900px){.architecture{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.architecture{grid-template-columns:1fr}}
+.comp{
+  border:1px solid var(--border);
+  background:#fbfdff;
+  border-radius:12px;
+  padding:12px;
+  min-height:112px;
+}
+.comp strong{display:block;margin-bottom:6px}
+.comp textarea{min-height:65px}
+.flow{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  align-items:stretch;
+  margin-top:10px;
+}
+.flow .step{
+  background:#f7f9fc;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:10px;
+  text-align:center;
+  font-size:.9rem;
+}
+@media(max-width:760px){.flow{grid-template-columns:1fr 1fr}}
+.summary{
+  background:#f4f8fc;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px;
+}
+hr{
+  border:0;
+  border-top:1px solid var(--border);
+  margin:16px 0;
+}
+footer{
+  text-align:center;
+  color:var(--muted);
+  margin-top:24px;
+  font-size:.85rem;
+}
+.badge{
+  display:inline-block;
+  padding:3px 8px;
+  border-radius:999px;
+  background:#eef2ff;
+  margin:2px 4px 2px 0;
+  font-size:.82rem;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header class="hero">
+  <div class="eyebrow" style="color:#dbe8ff">Desarrollo de Sistemas Inteligentes para la Toma de Decisiones · Unidad 1</div>
+  <h1>Misión Arquitectura: del problema a un sistema implementable</h1>
+  <p>Actividad integradora de 90 minutos · 4 retos + cierre individual · 100 puntos</p>
+  <p>Meta: convertir una necesidad organizacional en una especificación verificable antes de elegir modelos o herramientas.</p>
+
+  <div class="topbar">
+    <label>Nombre del equipo
+      <input id="teamName" type="text" maxlength="60" placeholder="Ej. Arquitectos de Decisión">
+    </label>
+    <div class="timer">
+      <span>Tiempo</span>
+      <strong id="timerDisplay">90:00</strong>
+      <button id="timerStart" class="btnSecondary" type="button">Iniciar</button>
+      <button id="timerPause" class="btnSecondary" type="button">Pausar</button>
+      <button id="timerReset" class="btnSecondary" type="button">Reiniciar</button>
+    </div>
+  </div>
+</header>
+
+<div class="progressWrap">
+  <div class="progressMeta">
+    <span>Progreso total</span>
+    <span id="progressText">0 / 100 pts</span>
+  </div>
+  <div class="progressTrack"><div id="progressBar" class="progressBar"></div></div>
+</div>
+
+<nav class="navgrid">
+  <a href="#reto1"><strong>1</strong><br>Descubre</a>
+  <a href="#reto2"><strong>2</strong><br>Especifica</a>
+  <a href="#reto3"><strong>3</strong><br>Arquitecta</a>
+  <a href="#reto4"><strong>4</strong><br>Audita</a>
+  <a href="#cierre"><strong>5</strong><br>Demuestra</a>
+</nav>
+
+<section id="reto1" class="section">
+  <div class="sectionHead">
+    <div>
+      <div class="eyebrow">0–15 min · 20 puntos</div>
+      <h2>Reto 1 · Descubre el problema real</h2>
+      <div class="small">Distingue proceso, tarea, punto de decisión y actor responsable.</div>
+    </div>
+    <div id="score1" class="score">0 / 20</div>
+  </div>
+
+  <div id="r1Cases" class="stack" style="margin-top:14px"></div>
+
+  <div class="actions">
+    <button id="checkR1" class="btnPrimary" type="button">Comprobar reto 1</button>
+    <button id="resetR1" class="btnSecondary" type="button">Limpiar</button>
+  </div>
+  <div id="feedbackR1" class="feedback" aria-live="polite"></div>
+</section>
+
+<section id="reto2" class="section">
+  <div class="sectionHead">
+    <div>
+      <div class="eyebrow">15–35 min · 20 puntos</div>
+      <h2>Reto 2 · Convierte ideas vagas en requisitos verificables</h2>
+      <div class="small">Clasifica requisitos y detecta cuándo una frase todavía no sirve para probar el sistema.</div>
+    </div>
+    <div id="score2" class="score">0 / 20</div>
+  </div>
+
+  <div id="r2Cases" class="grid2" style="margin-top:14px"></div>
+
+  <div class="panel" style="margin-top:14px">
+    <label>Pregunta crítica: ¿por qué una línea base es necesaria?
+      <select id="baselineQuestion">
+        <option value="">Selecciona…</option>
+        <option value="novelty">Porque permite demostrar si el proceso realmente mejora frente al estado actual</option>
+        <option value="accuracy">Porque reemplaza las métricas del sistema</option>
+        <option value="ai">Porque todo proyecto de IA debe tener una por definición</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="actions">
+    <button id="checkR2" class="btnPrimary" type="button">Comprobar reto 2</button>
+    <button id="resetR2" class="btnSecondary" type="button">Limpiar</button>
+  </div>
+  <div id="feedbackR2" class="feedback" aria-live="polite"></div>
+</section>
+
+<section id="reto3" class="section">
+  <div class="sectionHead">
+    <div>
+      <div class="eyebrow">35–65 min · 40 puntos</div>
+      <h2>Reto 3 · Diseña una arquitectura implementable</h2>
+      <div class="small">El objetivo no es dibujar cajas bonitas: cada componente debe tener responsabilidad y frontera claras.</div>
+    </div>
+    <div id="score3" class="score">0 / 40</div>
+  </div>
+
+  <label style="margin-top:14px">Selecciona un caso
+    <select id="caseSelect">
+      <option value="academica">A · Revisión de solicitudes académicas</option>
+      <option value="inventario">B · Reposición inteligente de inventario</option>
+      <option value="soporte">C · Priorización de tickets de soporte</option>
+      <option value="mantenimiento">D · Mantenimiento preventivo de equipos</option>
+    </select>
+  </label>
+  <div id="caseDescription" class="panel" style="margin-top:10px"></div>
+
+  <div class="stack" style="margin-top:16px">
+    <div>
+      <h3>1. Flujo actual y punto de decisión</h3>
+      <div class="flow">
+        <div class="step"><strong>Entrada</strong><br><textarea id="flowInput" rows="2" placeholder="¿Qué inicia el proceso?"></textarea></div>
+        <div class="step"><strong>Tarea</strong><br><textarea id="flowTask" rows="2" placeholder="¿Qué acción se realiza?"></textarea></div>
+        <div class="step"><strong>Decisión</strong><br><textarea id="flowDecision" rows="2" placeholder="¿Qué cambia el curso del proceso?"></textarea></div>
+        <div class="step"><strong>Resultado</strong><br><textarea id="flowOutcome" rows="2" placeholder="¿Qué estado o resultado produce?"></textarea></div>
+      </div>
+    </div>
+
+    <div>
+      <h3>2. Matriz mínima de actores</h3>
+      <div class="grid2">
+        <label>Usuario operador
+          <textarea id="actorOperator" rows="2" placeholder="Quién interactúa con el sistema"></textarea>
+        </label>
+        <label>Persona afectada
+          <textarea id="actorAffected" rows="2" placeholder="Quién recibe la consecuencia"></textarea>
+        </label>
+        <label>Propietario del proceso
+          <textarea id="actorOwner" rows="2" placeholder="Quién responde por objetivos y reglas"></textarea>
+        </label>
+        <label>Responsable de supervisión
+          <textarea id="actorSupervisor" rows="2" placeholder="Quién autoriza excepciones o acciones sensibles"></textarea>
+        </label>
+      </div>
+    </div>
+
+    <div>
+      <h3>3. Requisitos</h3>
+      <div class="grid2">
+        <label>Requisito funcional verificable
+          <textarea id="reqFunctional" rows="3" placeholder="Ej. El sistema consulta fuentes autorizadas y genera una recomendación."></textarea>
+        </label>
+        <label>Requisito no funcional verificable
+          <textarea id="reqNonFunctional" rows="3" placeholder="Ej. El 95 % de casos normales responde en menos de..."></textarea>
+        </label>
+        <label>Requisito de seguridad / control
+          <textarea id="reqSecurity" rows="3" placeholder="Ej. Toda acción de escritura requiere identidad y autorización."></textarea>
+        </label>
+        <label>Criterio de aceptación
+          <textarea id="acceptance" rows="3" placeholder="¿Qué debe demostrarse para considerar operable el incremento?"></textarea>
+        </label>
+      </div>
+    </div>
+
+    <div>
+      <h3>4. Línea base e indicadores</h3>
+      <div class="grid3">
+        <label>Línea base
+          <textarea id="baseline" rows="2" placeholder="Estado actual cuantificable"></textarea>
+        </label>
+        <label>Indicador principal
+          <textarea id="indicator1" rows="2" placeholder="Tiempo, error relevante, escalamiento, costo..."></textarea>
+        </label>
+        <label>Indicador secundario
+          <textarea id="indicator2" rows="2" placeholder="Cobertura, satisfacción, carga cognitiva..."></textarea>
+        </label>
+      </div>
+    </div>
+
+    <div>
+      <h3>5. Responsabilidad persona–sistema</h3>
+      <div class="grid2">
+        <label>Modo de supervisión
+          <select id="humanMode">
+            <option value="">Selecciona…</option>
+            <option>Human-in-the-loop</option>
+            <option>Human-on-the-loop</option>
+            <option>Human-in-command</option>
+            <option>Combinación justificada</option>
+          </select>
+        </label>
+        <label>Regla de abstención o escalamiento
+          <textarea id="abstention" rows="3" placeholder="¿Cuándo debe detenerse, abstenerse o escalar?"></textarea>
+        </label>
+      </div>
+    </div>
+
+    <div>
+      <h3>6. Mapa de datos</h3>
+      <div class="grid2">
+        <label>Fuente y propietario
+          <textarea id="dataSource" rows="3" placeholder="Qué dato, quién lo produce y quién responde por él"></textarea>
+        </label>
+        <label>Calidad, vigencia y sensibilidad
+          <textarea id="dataQuality" rows="3" placeholder="Faltantes, duplicados, actualización, datos sensibles..."></textarea>
+        </label>
+      </div>
+    </div>
+
+    <div>
+      <h3>7. Arquitectura por componentes</h3>
+      <div class="architecture">
+        <div class="comp"><strong>Entrada y validación</strong><textarea id="compInput" rows="3" placeholder="Qué entra y cómo se valida"></textarea></div>
+        <div class="comp"><strong>Orquestación</strong><textarea id="compOrch" rows="3" placeholder="Cómo fluye el caso"></textarea></div>
+        <div class="comp"><strong>Reglas / política</strong><textarea id="compRules" rows="3" placeholder="Qué invariantes y condiciones controla"></textarea></div>
+        <div class="comp"><strong>Modelo / servicio inteligente</strong><textarea id="compModel" rows="3" placeholder="Qué predice, clasifica o genera"></textarea></div>
+        <div class="comp"><strong>Servicios externos</strong><textarea id="compServices" rows="3" placeholder="APIs, BD o proveedores"></textarea></div>
+        <div class="comp"><strong>Interfaz y aprobación humana</strong><textarea id="compUI" rows="3" placeholder="Qué evidencia ve la persona y qué autoriza"></textarea></div>
+        <div class="comp"><strong>Persistencia / auditoría</strong><textarea id="compAudit" rows="3" placeholder="Qué se registra para reconstruir decisiones"></textarea></div>
+        <div class="comp"><strong>Recuperación / fallback</strong><textarea id="compFallback" rows="3" placeholder="Qué ocurre si un componente falla"></textarea></div>
+      </div>
+    </div>
+
+    <div>
+      <h3>8. Riesgos y controles</h3>
+      <div class="grid2">
+        <label>Riesgo principal
+          <textarea id="risk1" rows="2" placeholder="Ej. respuesta no fundamentada"></textarea>
+        </label>
+        <label>Control asociado
+          <textarea id="control1" rows="2" placeholder="Ej. exigir evidencia y abstención"></textarea>
+        </label>
+        <label>Restricción relevante
+          <textarea id="constraint" rows="2" placeholder="Presupuesto, privacidad, datos, infraestructura..."></textarea>
+        </label>
+        <label>Prueba de aceptación
+          <textarea id="testAcceptance" rows="2" placeholder="Qué prueba demostraría que el control funciona"></textarea>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button id="validateDesign" class="btnPrimary" type="button">Validar arquitectura</button>
+    <button id="showHints" class="btnSecondary" type="button">Ver criterios de calidad</button>
+  </div>
+  <div id="designFeedback" class="feedback" aria-live="polite"></div>
+
+  <div id="designHints" class="hint hidden">
+    <ul>
+      <li>No confundas tarea con decisión: la decisión cambia el curso del proceso.</li>
+      <li>Un requisito útil debe poder convertirse en una prueba.</li>
+      <li>El sistema no debe concentrar entrada, decisión, ejecución y auditoría en un único bloque.</li>
+      <li>La línea base permite demostrar mejora real frente al proceso actual.</li>
+      <li>La autonomía debe justificarse por impacto, reversibilidad, incertidumbre y beneficio operativo.</li>
+      <li>Todo riesgo importante debe traducirse en control y criterio de aceptación.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="reto4" class="section">
+  <div class="sectionHead">
+    <div>
+      <div class="eyebrow">65–82 min · 15 puntos</div>
+      <h2>Reto 4 · Auditoría de arquitectura</h2>
+      <div class="small">El sistema parece viable hasta que algo falla. Identifica el problema y el control adecuado.</div>
+    </div>
+    <div id="score4" class="score">0 / 15</div>
+  </div>
+
+  <div class="actions">
+    <button id="drawAttacks" class="btnPrimary" type="button">Generar 3 incidentes</button>
+    <button id="resetAttacks" class="btnSecondary" type="button">Reiniciar</button>
+  </div>
+
+  <div id="attackArea" class="grid3" style="margin-top:14px"></div>
+  <div id="feedbackR4" class="feedback" aria-live="polite"></div>
+</section>
+
+<section id="cierre" class="section">
+  <div class="sectionHead">
+    <div>
+      <div class="eyebrow">82–90 min · 5 puntos</div>
+      <h2>Cierre individual · Demuestra que puedes justificar el diseño</h2>
+      <div class="small">Una respuesta correcta vale 1 punto.</div>
+    </div>
+    <div id="score5" class="score">0 / 5</div>
+  </div>
+
+  <div id="exitQuestions" class="stack" style="margin-top:14px"></div>
+  <div class="actions">
+    <button id="checkExit" class="btnPrimary" type="button">Evaluar cierre</button>
+  </div>
+  <div id="feedbackExit" class="feedback" aria-live="polite"></div>
+</section>
+
+<section class="section">
+  <div class="sectionHead">
+    <div>
+      <h2>Ficha final de arquitectura</h2>
+      <div class="small">Resume el problema, la decisión, los actores, los datos, los componentes y el criterio de aceptación.</div>
+    </div>
+    <button id="generateSummary" class="btnPrimary" type="button">Generar ficha</button>
+  </div>
+  <div id="summaryCard" class="summary hidden" style="margin-top:14px"></div>
+</section>
+
+<footer>Unidad 1 · Descubrimiento del problema y arquitectura implementable</footer>
+</div>
+
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const state = {scores:[0,0,0,0,0],time:5400,timer:null,attacks:[]};
+const safe = s => String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function updateTotal(){
+  const total=state.scores.reduce((a,b)=>a+b,0);
+  $('progressText').textContent=total+' / 100 pts';
+  $('progressBar').style.width=Math.max(0,Math.min(100,total))+'%';
+}
+function setScore(i,val,id){
+  state.scores[i]=val;
+  $(id).textContent=val+' / '+[20,20,40,15,5][i];
+  updateTotal();
+}
+function formatTime(){
+  const m=Math.floor(state.time/60),s=state.time%60;
+  $('timerDisplay').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+$('timerStart').addEventListener('click',()=>{
+  if(state.timer||state.time<=0)return;
+  state.timer=setInterval(()=>{
+    state.time--;
+    formatTime();
+    if(state.time<=0){clearInterval(state.timer);state.timer=null;}
+  },1000);
+});
+$('timerPause').addEventListener('click',()=>{if(state.timer){clearInterval(state.timer);state.timer=null;}});
+$('timerReset').addEventListener('click',()=>{if(state.timer)clearInterval(state.timer);state.timer=null;state.time=5400;formatTime();});
+
+const r1=[
+['“Recibir solicitud, revisar documentos, emitir respuesta y cerrar expediente”.','process','Es una secuencia de actividades orientadas a un resultado.'],
+['“Verificar que el estudiante adjuntó identificación”.','task','Es una acción concreta dentro de un proceso.'],
+['“Decidir si la solicitud se aprueba, se previene o pasa a revisión especial”.','decision','El curso del proceso cambia según evidencia, reglas o juicio.'],
+['“La coordinación académica conserva la decisión final”.','owner','Describe responsabilidad sobre el proceso y la decisión.']
+];
+
+$('r1Cases').innerHTML=r1.map((c,i)=>`
+<div class="caseCard">
+  <strong>${i+1}. ${c[0]}</strong>
+  <div class="radioRow">
+    <label><input type="radio" name="r1_${i}" value="process"> Proceso</label>
+    <label><input type="radio" name="r1_${i}" value="task"> Tarea</label>
+    <label><input type="radio" name="r1_${i}" value="decision"> Punto de decisión</label>
+    <label><input type="radio" name="r1_${i}" value="owner"> Responsable / propietario</label>
+  </div>
+  <div id="r1fb_${i}" class="feedback"></div>
+</div>`).join('');
+
+$('checkR1').addEventListener('click',()=>{
+  let correct=0;
+  r1.forEach((c,i)=>{
+    const q=document.querySelector(`input[name="r1_${i}"]:checked`);
+    if(q&&q.value===c[1]){
+      correct++;
+      $('r1fb_'+i).innerHTML='<span class="success">✓ '+c[2]+'</span>';
+    }else{
+      $('r1fb_'+i).textContent='Revisa: '+c[2];
+    }
+  });
+  setScore(0,correct*5,'score1');
+  $('feedbackR1').textContent=correct===4
+    ?'Dominio completo: ya distingues flujo, tarea, decisión y responsabilidad.'
+    :'Aciertos: '+correct+'/4. Recuerda: automatizar una tarea no equivale a automatizar una decisión.';
+});
+$('resetR1').addEventListener('click',()=>{
+  document.querySelectorAll('[name^="r1_"]').forEach(x=>x.checked=false);
+  r1.forEach((_,i)=>$('r1fb_'+i).textContent='');
+  $('feedbackR1').textContent='';
+  setScore(0,0,'score1');
+});
+
+const r2=[
+['El sistema consulta fuentes autorizadas y genera una recomendación.','Funcional'],
+['El 95 % de los casos normales responde dentro del límite acordado.','No funcional'],
+['Toda acción de escritura requiere identidad y autorización.','Seguridad'],
+['El sistema debe ser rápido.','Vago / no verificable'],
+['El sistema solicita aprobación humana antes de una acción irreversible.','Funcional'],
+['El sistema conserva trazabilidad suficiente para reconstruir una decisión.','No funcional'],
+['El sistema debe ser seguro.','Vago / no verificable'],
+['El costo máximo por ejecución no supera el umbral acordado.','Criterio de aceptación']
+];
+const r2opts=['Funcional','No funcional','Seguridad','Criterio de aceptación','Vago / no verificable'];
+
+$('r2Cases').innerHTML=r2.map((c,i)=>`
+<div class="caseCard">
+  <strong>${i+1}. ${c[0]}</strong>
+  <select id="r2_${i}">
+    <option value="">Clasifica…</option>
+    ${r2opts.map(o=>`<option>${o}</option>`).join('')}
+  </select>
+  <div id="r2fb_${i}" class="feedback"></div>
+</div>`).join('');
+
+$('checkR2').addEventListener('click',()=>{
+  let correct=0;
+  r2.forEach((c,i)=>{
+    if($('r2_'+i).value===c[1]){
+      correct++;
+      $('r2fb_'+i).innerHTML='<span class="success">✓ Correcto</span>';
+    }else{
+      $('r2fb_'+i).textContent='Respuesta esperada: '+c[1];
+    }
+  });
+  const baselineOk=$('baselineQuestion').value==='novelty';
+  let score=correct*2+(baselineOk?4:0);
+  score=Math.min(20,score);
+  setScore(1,score,'score2');
+  $('feedbackR2').textContent=baselineOk
+    ?'Correcto: sin línea base, una mejora percibida puede ser sólo novedad tecnológica.'
+    :'La línea base sirve para comparar el nuevo sistema con el proceso actual y demostrar mejora real.';
+});
+$('resetR2').addEventListener('click',()=>{
+  r2.forEach((_,i)=>{$('r2_'+i).value='';$('r2fb_'+i).textContent='';});
+  $('baselineQuestion').value='';
+  $('feedbackR2').textContent='';
+  setScore(1,0,'score2');
+});
+
+const caseInfo={
+academica:'Una coordinación académica desea reducir el tiempo empleado en revisar solicitudes. El sistema consulta requisitos, detecta documentación faltante, prepara una recomendación y solicita aprobación humana antes de modificar un estado oficial.',
+inventario:'Un almacén quiere reducir quiebres de stock. El sistema analiza existencias y consumo, propone reposiciones y escala compras excepcionales. La autorización final de compras de alto impacto permanece en una persona.',
+soporte:'Un centro de soporte desea priorizar tickets. El sistema clasifica urgencia, detecta información faltante y recomienda prioridad. Los casos críticos o ambiguos deben poder escalarse a una persona.',
+mantenimiento:'Un área técnica quiere anticipar mantenimiento de equipos. El sistema usa historial, sensores y reglas para recomendar intervención. La decisión de detener un equipo crítico requiere autorización humana.'
+};
+function updateCase(){$('caseDescription').textContent=caseInfo[$('caseSelect').value];}
+updateCase();
+$('caseSelect').addEventListener('change',updateCase);
+
+$('showHints').addEventListener('click',()=>$('designHints').classList.toggle('hidden'));
+
+$('validateDesign').addEventListener('click',()=>{
+  const textIds=[
+    'flowInput','flowTask','flowDecision','flowOutcome',
+    'actorOperator','actorAffected','actorOwner','actorSupervisor',
+    'reqFunctional','reqNonFunctional','reqSecurity','acceptance',
+    'baseline','indicator1','indicator2','abstention',
+    'dataSource','dataQuality',
+    'compInput','compOrch','compRules','compModel','compServices','compUI','compAudit','compFallback',
+    'risk1','control1','constraint','testAcceptance'
+  ];
+  const selectIds=['humanMode'];
+  let points=0,issues=[];
+
+  textIds.forEach(id=>{
+    const v=$(id).value.trim();
+    if(v.length>=14)points+=1;
+    else issues.push(id);
+  });
+  selectIds.forEach(id=>{
+    if($(id).value)points+=2;
+    else issues.push(id);
+  });
+
+  const nf=$('reqNonFunctional').value.toLowerCase();
+  if(/(%|segundo|minuto|tiempo|menos|máximo|mínimo|latencia|disponibilidad|error|costo|tasa|95|99)/.test(nf)) points+=2;
+  else issues.push('requisito no funcional medible');
+
+  const acc=($('acceptance').value+' '+$('testAcceptance').value).toLowerCase();
+  if(/(demostrar|verificar|prueba|cero|%|máximo|mínimo|menos|autoriz|trazabilidad|registro)/.test(acc)) points+=2;
+  else issues.push('criterio de aceptación verificable');
+
+  const abst=$('abstention').value.toLowerCase();
+  if(/(absten|escal|deten|incertid|falt|autoriza|riesgo)/.test(abst)) points+=2;
+  else issues.push('regla de abstención/escalamiento');
+
+  const audit=$('compAudit').value.toLowerCase();
+  if(/(registro|traza|auditor|fuente|versión|decision|decisión|usuario|resultado)/.test(audit)) points+=2;
+  else issues.push('trazabilidad');
+
+  points=Math.min(40,points);
+  setScore(2,points,'score3');
+
+  if(points>=36){
+    $('designFeedback').innerHTML='<span class="success">Arquitectura estructuralmente sólida.</span> Ya puedes someterla a auditoría.';
+  }else{
+    $('designFeedback').innerHTML='<strong>Puntos a revisar:</strong> '+issues.slice(0,10).map(safe).join(', ')+'. Una arquitectura incompleta no se vuelve implementable por añadir más tecnología.';
+  }
+});
+
+const attacks=[
+{
+title:'Datos desactualizados',
+body:'El modelo recibe un catálogo cuya semántica cambió respecto a la validación original.',
+q:'¿Qué control es más pertinente?',
+opts:['Ignorar el cambio','Validar esquema, vigencia y significado antes de procesar','Aumentar la autonomía'],
+ans:1,
+why:'La calidad y el significado de entrada deben verificarse antes de usar el modelo.'
+},
+{
+title:'Acción no autorizada',
+body:'El sistema escribe un cambio oficial sin identidad ni aprobación.',
+q:'¿Qué control falta?',
+opts:['Mínimo privilegio y autorización','Más precisión del modelo','Un tablero más atractivo'],
+ans:0,
+why:'Toda acción sensible de escritura debe contar con identidad, autorización y trazabilidad.'
+},
+{
+title:'Proveedor caído',
+body:'El servicio inteligente externo deja de responder.',
+q:'¿Qué diseño reduce el impacto?',
+opts:['Acoplar aún más el sistema al proveedor','Fallback y frontera clara del componente','Eliminar los registros'],
+ans:1,
+why:'Una buena frontera permite sustituir o aislar servicios sin rediseñar todo el producto.'
+},
+{
+title:'Sin línea base',
+body:'El equipo afirma que el proceso mejoró porque “ahora usa IA”.',
+q:'¿Qué falta?',
+opts:['Comparación con indicadores del proceso actual','Más modelos','Más automatización'],
+ans:0,
+why:'Sin línea base no puede demostrarse que el proceso realmente mejoró.'
+},
+{
+title:'Requisito ambiguo',
+body:'El requisito dice “el sistema debe ser seguro”.',
+q:'¿Cuál es el problema?',
+opts:['No es verificable','Es demasiado técnico','Es un requisito funcional perfecto'],
+ans:0,
+why:'Debe traducirse a condiciones observables y medibles.'
+},
+{
+title:'Interfaz sin evidencia',
+body:'La persona supervisora recibe una recomendación, pero no ve fuentes ni motivo.',
+q:'¿Qué se debilita?',
+opts:['Supervisión efectiva y trazabilidad','Velocidad del modelo','Almacenamiento'],
+ans:0,
+why:'La persona sólo puede ejercer control real si recibe evidencia suficiente.'
+},
+{
+title:'Bloque monolítico',
+body:'Un único componente recibe datos, decide, ejecuta y registra todo.',
+q:'¿Qué riesgo arquitectónico aumenta?',
+opts:['Acoplamiento y dificultad de prueba/reemplazo','Trazabilidad automática','Menor complejidad siempre'],
+ans:0,
+why:'Separar responsabilidades facilita prueba, reemplazo y auditoría.'
+},
+{
+title:'Caso fuera de alcance',
+body:'La información disponible es insuficiente, pero el sistema debe emitir una respuesta obligatoriamente.',
+q:'¿Qué capacidad falta?',
+opts:['Abstención o escalamiento','Más interfaz','Más almacenamiento'],
+ans:0,
+why:'El sistema debe reconocer cuándo el caso excede su capacidad o autorización.'
+}
+];
+let attackScores=[0,0,0];
+
+function renderAttacks(){
+  $('attackArea').innerHTML=state.attacks.map((a,j)=>`
+  <div class="caseCard">
+    <div class="eyebrow">Incidente ${j+1}</div>
+    <h3>${a.title}</h3>
+    <p>${a.body}</p>
+    <strong>${a.q}</strong>
+    <div class="stack" style="margin-top:8px">
+      ${a.opts.map((o,k)=>`<label style="font-weight:400"><input type="radio" name="attack_${j}" value="${k}"> ${o}</label>`).join('')}
+    </div>
+    <label style="margin-top:10px">Justifica en una frase
+      <textarea id="attackWhy_${j}" rows="2"></textarea>
+    </label>
+    <button class="btnSecondary" type="button" data-check-attack="${j}" style="margin-top:10px">Evaluar incidente</button>
+    <div id="attackFb_${j}" class="feedback"></div>
+  </div>`).join('');
+
+  document.querySelectorAll('[data-check-attack]').forEach(btn=>{
+    btn.addEventListener('click',()=>checkAttack(Number(btn.dataset.checkAttack)));
+  });
+}
+function checkAttack(j){
+  const a=state.attacks[j];
+  const q=document.querySelector(`input[name="attack_${j}"]:checked`);
+  const why=$('attackWhy_'+j).value.trim();
+  let pts=0;
+  if(q&&Number(q.value)===a.ans)pts+=3;
+  if(why.length>=22)pts+=2;
+  attackScores[j]=pts;
+  setScore(3,attackScores.reduce((x,y)=>x+y,0),'score4');
+  $('attackFb_'+j).textContent=(q&&Number(q.value)===a.ans?'✓ ':'Revisa. ')+a.why;
+}
+
+$('drawAttacks').addEventListener('click',()=>{
+  const pool=attacks.map((_,i)=>i);
+  for(let i=pool.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [pool[i],pool[j]]=[pool[j],pool[i]];
+  }
+  state.attacks=[attacks[pool[0]],attacks[pool[1]],attacks[pool[2]]];
+  attackScores=[0,0,0];
+  setScore(3,0,'score4');
+  renderAttacks();
+  $('feedbackR4').textContent='Cada incidente vale 5 puntos: 3 por decisión y 2 por justificación.';
+});
+$('resetAttacks').addEventListener('click',()=>{
+  state.attacks=[];
+  attackScores=[0,0,0];
+  $('attackArea').innerHTML='';
+  $('feedbackR4').textContent='';
+  setScore(3,0,'score4');
+});
+
+const exitQs=[
+{
+q:'¿Qué distingue un punto de decisión de una tarea?',
+opts:['La decisión cambia el curso del proceso según evidencia, reglas, predicción o juicio','La tarea siempre usa IA','No existe diferencia'],
+ans:0
+},
+{
+q:'¿Cuál de estos requisitos es verificable?',
+opts:['El sistema debe ser rápido','El 95 % de casos normales responde dentro del límite acordado','El sistema debe ser moderno'],
+ans:1
+},
+{
+q:'¿Por qué no basta medir sólo la precisión del modelo?',
+opts:['Porque el sistema puede fallar por latencia, interfaz, recuperación o integración','Porque la precisión nunca sirve','Porque siempre debe usarse sólo satisfacción'],
+ans:0
+},
+{
+q:'¿Qué componente debería registrar lo necesario para reconstruir una decisión?',
+opts:['Persistencia, auditoría y observabilidad','Sólo la interfaz','Sólo el modelo'],
+ans:0
+},
+{
+q:'¿Qué convierte un riesgo en una condición útil de diseño?',
+opts:['Traducirlo a un control y una prueba de aceptación','Escribirlo en una diapositiva','Ocultarlo del usuario'],
+ans:0
+}
+];
+
+$('exitQuestions').innerHTML=exitQs.map((x,i)=>`
+<div class="caseCard">
+  <strong>${i+1}. ${x.q}</strong>
+  <div class="stack" style="margin-top:8px">
+    ${x.opts.map((o,k)=>`<label style="font-weight:400"><input type="radio" name="exit_${i}" value="${k}"> ${o}</label>`).join('')}
+  </div>
+  <div id="exitFb_${i}" class="feedback"></div>
+</div>`).join('');
+
+$('checkExit').addEventListener('click',()=>{
+  let c=0;
+  exitQs.forEach((x,i)=>{
+    const q=document.querySelector(`input[name="exit_${i}"]:checked`);
+    if(q&&Number(q.value)===x.ans){
+      c++;
+      $('exitFb_'+i).innerHTML='<span class="success">✓ Correcto</span>';
+    }else{
+      $('exitFb_'+i).textContent='Revisa este concepto.';
+    }
+  });
+  setScore(4,c,'score5');
+  $('feedbackExit').textContent=c===5
+    ?'5/5. Dominio individual demostrado.'
+    :'Resultado individual: '+c+'/5. Revisa antes de cerrar la arquitectura.';
+});
+
+$('generateSummary').addEventListener('click',()=>{
+  const card=$('summaryCard');
+  card.classList.remove('hidden');
+  const team=$('teamName').value.trim()||'Sin nombre';
+  const caseName=$('caseSelect').selectedOptions[0].textContent;
+
+  const components=[
+    ['Entrada/validación',$('compInput').value],
+    ['Orquestación',$('compOrch').value],
+    ['Reglas/política',$('compRules').value],
+    ['Modelo/servicio',$('compModel').value],
+    ['Servicios externos',$('compServices').value],
+    ['Interfaz/aprobación',$('compUI').value],
+    ['Auditoría',$('compAudit').value],
+    ['Fallback',$('compFallback').value]
+  ];
+
+  card.innerHTML=`
+  <div class="grid2">
+    <div><div class="eyebrow">Equipo</div><strong>${safe(team)}</strong></div>
+    <div><div class="eyebrow">Caso</div><strong>${safe(caseName)}</strong></div>
+  </div>
+  <hr>
+  <p><strong>Flujo:</strong> ${safe($('flowInput').value)||'…'} → ${safe($('flowTask').value)||'…'} → <strong>${safe($('flowDecision').value)||'…'}</strong> → ${safe($('flowOutcome').value)||'…'}</p>
+  <p><strong>Responsable final:</strong> ${safe($('actorOwner').value)||'Pendiente'}</p>
+  <p><strong>Supervisión:</strong> ${safe($('humanMode').value)||'Pendiente'} · ${safe($('abstention').value)||'Sin regla definida'}</p>
+  <p><strong>Línea base:</strong> ${safe($('baseline').value)||'Pendiente'}</p>
+  <p><strong>Indicadores:</strong> ${safe($('indicator1').value)||'Pendiente'} · ${safe($('indicator2').value)||'Pendiente'}</p>
+  <p><strong>Datos:</strong> ${safe($('dataSource').value)||'Pendiente'} · ${safe($('dataQuality').value)||'Pendiente'}</p>
+  <hr>
+  <strong>Arquitectura por componentes</strong>
+  <div style="margin-top:8px">
+    ${components.map(c=>`<span class="badge">${safe(c[0])}: ${safe(c[1])||'Pendiente'}</span>`).join('')}
+  </div>
+  <hr>
+  <p><strong>Riesgo:</strong> ${safe($('risk1').value)||'Pendiente'}</p>
+  <p><strong>Control:</strong> ${safe($('control1').value)||'Pendiente'}</p>
+  <p><strong>Criterio de aceptación:</strong> ${safe($('acceptance').value)||safe($('testAcceptance').value)||'Pendiente'}</p>
+  <p><strong>Puntaje de práctica:</strong> ${state.scores.reduce((a,b)=>a+b,0)} / 100</p>`;
+});
+
+formatTime();
+updateTotal();
+})();
+</script>
+</body>
+</html>
