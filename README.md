@@ -1,78 +1,65 @@
-# Desarrollo de Sistemas Inteligentes para la Toma de Decisiones (EASC-342)
+# Desarrollo de Sistemas Inteligentes para la Toma de Decisiones — EASC-342
 
-**Universidad Autónoma de Nayarit** · Área Económico Administrativo · Licenciatura en Sistemas Computacionales  
+**Universidad Autónoma de Nayarit · Licenciatura en Sistemas Computacionales**  
 **Responsable académico:** Dr. Oscar Gabriel Vizcaíno Monroy  
-**Academia:** Tratamiento de la Información · **Actualización curricular:** agosto de 2026  
-**Modalidad:** curso-taller obligatorio · **6 créditos** · **96 horas** (16 teóricas, 36 prácticas y 44 independientes).
+**Programa actualizado:** agosto de 2026 · 96 horas · 6 créditos
 
-## Acceder al portal
+## Acceso al portal de actividades didácticas
 
-**[Abrir los seis laboratorios interactivos](https://angelcaido37.github.io/Desarrollo_SE/)**
+[**Abrir las seis unidades en GitHub Pages**](https://angelcaido37.github.io/Desarrollo_SE/)
 
-Este repositorio presenta actividades formativas en HTML para aprender a **desarrollar, integrar, desplegar, probar y operar** sistemas inteligentes que apoyan la toma de decisiones. A diferencia de una introducción a la IA, aquí el foco está en contratos de componentes, servicios y APIs, RAG, herramientas y agentes, UX para decisiones, observabilidad, seguridad, aprobación humana y recuperación ante fallos.
+## Qué se actualizó
 
-Los laboratorios se articulan mediante el caso ficticio **CampusDecide**, un sistema universitario de apoyo a decisiones. No representa trámites, horarios ni datos oficiales de la UAN.
+Los **seis laboratorios HTML** de la carpeta `Interactivos/` se rediseñaron como apoyos para las **actividades teóricas de Classroom** de EASC-342. En lugar de exigir programación o despliegue, ahora proporcionan:
 
-## Unidades, laboratorios y ponderación
+- Definiciones concisas, objetivos y cinco tarjetas de repaso por unidad.
+- Un simulador didáctico con variables controlables y advertencias sobre alcance.
+- Cinco **retos autocorregibles** con pistas, explicación y oportunidad de reintento.
+- Seis preguntas de autoevaluación con retroalimentación inmediata.
+- Una guía de planificación de la tarea, notas locales y bitácora TXT descargable.
 
-| Unidad | Contenidos principales | Valor | Actividad |
-|---|---|---:|---|
-| I. Problema y arquitectura | Procesos AS-IS/TO-BE, líneas base, requisitos, responsabilidades e indicadores. | 15 % | [Abrir HTML](./Interactivos/Unidad_1_Arquitectura_Decisiones.html) |
-| II. Contratos e integración | Validación de esquemas, API, errores, timeout, idempotencia, reintentos y fallback. | 15 % | [Abrir HTML](./Interactivos/Unidad_2_Contratos_APIs.html) |
-| III. Aplicaciones RAG y evidencia | Fuentes, vigencia documental, recuperación, citas, abstención y trazabilidad. | 15 % | [Abrir HTML](./Interactivos/Unidad_3_RAG_Evidencia.html) |
-| IV. Agentes y automatización | Herramientas, acciones autorizadas, aprobación humana, límites y auditoría. | 15 % | [Abrir HTML](./Interactivos/Unidad_4_Agentes_Aprobaciones.html) |
-| V. Interfaces de decisión | Recomendaciones explicables, confianza, accesibilidad y prueba con usuarios. | 15 % | [Abrir HTML](./Interactivos/Unidad_5_Interfaces_Usabilidad.html) |
-| VI. Despliegue y operación | Observabilidad, seguridad, latencia, incidentes, versiones y rollback. | 25 % | [Abrir HTML](./Interactivos/Unidad_6_Observabilidad_Rollback.html) |
+Los datos y escenarios del laboratorio son deliberadamente **diferentes** a los de las tareas evaluables, para evitar sustituir el trabajo individual.
 
-Cada laboratorio ofrece conceptos y tarjetas de repaso, simuladores técnicos, seis preguntas con retroalimentación inmediata y apoyo para preparar la tarea. Los puntos obtenidos son **formativos**, no una calificación curricular oficial.
+| Unidad | Práctica interactiva | Preparación para Classroom | Ponderación curricular |
+|---|---|---|---:|
+| 1. Del problema a la arquitectura | [Abrir laboratorio](./Interactivos/Unidad_1_Arquitectura_Decisiones.html) | Arquitectura, AS-IS/TO-BE e indicadores | 15 % |
+| 2. Contratos y servicios inteligentes | [Abrir laboratorio](./Interactivos/Unidad_2_Contratos_APIs.html) | Esquemas, idempotencia, timeout y fallback | 15 % |
+| 3. Fuentes y respuestas fundamentadas | [Abrir laboratorio](./Interactivos/Unidad_3_RAG_Evidencia.html) | Recuperación, citas, vigencia y abstención | 15 % |
+| 4. Automatización con supervisión humana | [Abrir laboratorio](./Interactivos/Unidad_4_Agentes_Aprobaciones.html) | Estados, herramientas, permisos y recuperación | 15 % |
+| 5. Interfaces que ayudan a decidir | [Abrir laboratorio](./Interactivos/Unidad_5_Interfaces_Usabilidad.html) | Jerarquía visual, incertidumbre y accesibilidad | 15 % |
+| 6. Operación, incidentes y liberación | [Abrir laboratorio](./Interactivos/Unidad_6_Observabilidad_Rollback.html) | SLO, logs, seguridad y rollback | 25 % |
 
-## Resultados de aprendizaje
+## Cómo estudiar
 
-Los estudiantes deberán poder convertir una necesidad de decisión en un proceso y arquitectura verificables; integrar componentes y modelos previamente validados; construir aplicaciones fundamentadas, agentes o automatizaciones supervisadas; diseñar interfaces accesibles; desplegar un prototipo; registrar métricas, costos y fallos; y aplicar medidas de recuperación, trazabilidad y gobernanza.
+1. Abre la unidad correspondiente desde el `index.html`.
+2. Estudia los conceptos y marca las tarjetas que necesites volver a repasar.
+3. Resuelve el caso alternativo usando el simulador y después los cinco retos.
+4. Comprueba tus conocimientos con seis preguntas de opción múltiple.
+5. En **Mi tarea**, completa tu plan personal y desarrolla la evidencia solicitada en Google Classroom, **sin copiar los resultados del caso alternativo**.
+6. Descarga la bitácora local si deseas conservar un registro de avances.
 
-## Evidencias curriculares
+## Alcance y límites
 
-1. Especificación del problema, proceso y arquitectura (15 %).
-2. Contrato de inferencia e integración de componente (15 %).
-3. Aplicación RAG con fuentes y evaluación (15 %).
-4. Agente o automatización con supervisión humana (15 %).
-5. Interfaz de apoyo a decisiones y prueba con usuarios (15 %).
-6. Proyecto integrador operable y defensa individual (25 %).
+Los HTML están hechos con CSS y JavaScript integrados, **sin dependencias ni conexión a servicios externos**. Guardan el avance únicamente en el navegador que se utilice, mediante `localStorage`, y permiten exportar notas a TXT. No se envían calificaciones a Google Classroom y no se recopilan datos personales.
 
-La acreditación del programa requiere un mínimo de 80 % de asistencia, calificación final de 60/100 y **aprobar por separado** el proyecto integrador y la defensa individual con al menos 60/100 en cada componente. También exige demostrar autoría y declarar el uso de herramientas de IA.
+Los simuladores no constituyen APIs reales, flujos productivos, RAG generativo, agentes con herramientas conectadas ni despliegues. Esta adaptación permite apoyar la **cobertura teórica impartida**. No demuestra las competencias de integración y operación exigidas por el programa original, que deben evaluarse conforme a la adecuación académica correspondiente.
 
-## Organización del repositorio
+## Evidencias curriculares teóricas adaptadas
 
-```text
-Desarrollo_SE/
-├── index.html
-├── README.md
-├── .nojekyll
-├── Interactivos/
-│   ├── Unidad_1_Arquitectura_Decisiones.html
-│   ├── Unidad_2_Contratos_APIs.html
-│   ├── Unidad_3_RAG_Evidencia.html
-│   ├── Unidad_4_Agentes_Aprobaciones.html
-│   ├── Unidad_5_Interfaces_Usabilidad.html
-│   ├── Unidad_6_Observabilidad_Rollback.html
-└── Material/  # Recursos anteriores; se conservan
-```
+- **I (15 %):** especificación del problema, AS-IS/TO-BE, línea base y arquitectura.
+- **II (15 %):** análisis de un contrato de inferencia y manejo conceptual de errores.
+- **III (15 %):** fuentes, citas, vigencia, contradicción e inyección en RAG.
+- **IV (15 %):** permisos, estados, cinco pruebas de escritorio y escalamiento.
+- **V (15 %):** bocetos, accesibilidad, prueba real con dos compañeros y ajustes.
+- **VI (25 %):** auditoría de diez o menos registros del caso, métricas, incidentes, rollback y defensa.
 
-## Uso en el aula
+La **tarea de Classroom** sigue siendo el instrumento evaluable; el laboratorio es una preparación, con preguntas y ejemplos distintos. El proyecto operable del programa y su defensa tienen requisitos curriculares independientes, por lo que su sustitución exige la justificación institucional correspondiente.
 
-Abre el [portal](https://angelcaido37.github.io/Desarrollo_SE/), selecciona una unidad y completa las simulaciones. Para Google Classroom, adjunta el enlace del laboratorio correspondiente y solicita las evidencias, los cálculos, la bitácora y la justificación de decisiones que defina la tarea.
+## Publicación en GitHub Pages
 
-**Alcance:** los seis HTML son autónomos y funcionan como simuladores de navegador. No realizan llamadas a APIs productivas ni despliegues reales. El laboratorio de la Unidad III representa recuperación documental extractiva, **no un sistema RAG conectado a un LLM**. No se deben ingresar secretos ni datos personales reales. Ningún resultado de una simulación sustituye pruebas de integración, seguridad o validación con usuarios.
+La rama `main` contiene `index.html`, `.nojekyll`, `README.md`, `Interactivos/` y `Material/` (recursos históricos conservados). El flujo en `.github/workflows/publicar-laboratorios.yml` comprueba los seis archivos antes de desplegar la web.
 
-## Publicación con GitHub Pages
+## Referencias curriculares
 
-En **Settings → Pages**, utiliza **Deploy from a branch**, rama `main`, carpeta `/(root)`. El archivo `.nojekyll` evita el procesamiento de Jekyll; los enlaces del sitio son relativos al proyecto. Si el despliegue falla después de compilar y generar el artefacto correctamente, revisa el estado de GitHub Pages y Actions antes de cambiar el código.
-
-## Referencias fundamentales
-
-- Huyen, C. (2025). *AI Engineering: Building Applications with Foundation Models*. O'Reilly.
-- Kleppmann, M. (2017). *Designing Data-Intensive Applications*. O'Reilly.
-- Reis, J. y Housley, M. (2022). *Fundamentals of Data Engineering*. O'Reilly.
+- Programa de estudio EASC-342, *Desarrollo de Sistemas Inteligentes para la Toma de Decisiones*, actualización de agosto de 2026.
 - NIST (2023). *AI Risk Management Framework (AI RMF 1.0)*. https://doi.org/10.6028/NIST.AI.100-1
-
-**Nota:** los recursos actuales tienen fines académicos y no constituyen sistemas productivos de apoyo a decisiones.
